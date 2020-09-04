@@ -112,7 +112,7 @@ namespace BarcodeSimulator
 
 			// Get an ID for the hotkey and increase current ID
 			this.id = Hotkey.currentID;
-			Hotkey.currentID = Hotkey.currentID + 1 % Hotkey.maximumID;
+			Hotkey.currentID += 1 % Hotkey.maximumID;
 
 			// Translate modifier keys into unmanaged version
 			uint modifiers = (this.Alt ? Hotkey.MOD_ALT : 0) | (this.Control ? Hotkey.MOD_CONTROL : 0) |
@@ -120,12 +120,12 @@ namespace BarcodeSimulator
 
 			// Register the hotkey
 			if (Hotkey.RegisterHotKey(windowControl.Handle, this.id, modifiers, keyCode) == 0)
-			{ 
+			{
 				// Is the error that the hotkey is registered?
 				if (Marshal.GetLastWin32Error() == ERROR_HOTKEY_ALREADY_REGISTERED)
 				{ return false; }
 				else
-				{ throw new Win32Exception(); } 
+				{ throw new Win32Exception(); }
 			}
 
 			// Save the control reference and register state

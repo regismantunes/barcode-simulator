@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Keyboard = System.Windows.Input.Keyboard;
+using Key = System.Windows.Input.Key;
 
 namespace BarcodeSimulator
 {
@@ -20,7 +22,7 @@ namespace BarcodeSimulator
         {
             // setup a new Hotkey to watch for Windows+Z
             // this could/should be configurable on the form
-            var hk = new Hotkey(Keys.Z, shift: false, control: false, alt: false, windows: true);
+            var hk = new Hotkey(Keys.W, shift: true, control: true, alt: false, windows: false);
             hk.Pressed += HotkeyPressed;
             hk.Register(this);
 
@@ -28,8 +30,8 @@ namespace BarcodeSimulator
             hotkeyTextBox.Text = hk.ToString();
 
             // list all available keys in the 'ends with' drop down
-            Enum.GetNames(typeof (Keys)).ToList().ForEach(k => endsWithComboBox.Items.Add(k));
-
+            Enum.GetNames(typeof(Keys)).ToList().ForEach(k => endsWithComboBox.Items.Add(k));
+            
             // focus on the text box for adding new string
             ActiveControl = newStringTextBox;
 
@@ -56,35 +58,48 @@ namespace BarcodeSimulator
             }
 
             var endKey = Keys.None;
-
             if (endsWithComboBox.SelectedIndex > 0)
                 Enum.TryParse(endsWithComboBox.SelectedItem.ToString(), out endKey);
+            
+            var s = GetNextCode() + (crlfCheckBox.Checked ? Char.ConvertFromUtf32(13) + Char.ConvertFromUtf32(10) : String.Empty);
 
-            var s = GetNextCode();
+            while (Keyboard.IsKeyDown(Key.LeftShift)
+                || Keyboard.IsKeyDown(Key.RightShift)
+                || Keyboard.IsKeyDown(Key.LeftCtrl)
+                || Keyboard.IsKeyDown(Key.RightCtrl)
+                || Keyboard.IsKeyDown(Key.LeftAlt)
+                || Keyboard.IsKeyDown(Key.RightAlt))
+            { Thread.Sleep(10); }
 
             // do the delayed key sending in a separate thread so we don't hang the window
-            ThreadStart starter = () => StartSending(s, (int) delayNumeric.Value, endKey);
+            ThreadStart starter = () => StartSending(s, (int)delayNumeric.Value, endKey);
             var t = new Thread(starter) { Name = "Sending keys " + s };
             t.Start();
         }
 
         private static void StartSending(string text, int delay, Keys endKey = Keys.None)
         {
-
-            foreach (var s in text.Select(character => character.ToString()))
+            try
             {
-                Debug.WriteLine("{0} Sending text '{1}'", DateTime.Now.ToString("HH:mm:ss.fff"), s);
-                SendKeys.SendWait(s);
-                SendKeys.Flush();
-                Thread.Sleep(delay);
+                foreach (var s in text.Select(character => character.ToString()))
+                {
+                    Debug.WriteLine("{0} Sending text '{1}'", DateTime.Now.ToString("HH:mm:ss.fff"), s);
+                    SendKeys.SendWait(s);
+                    SendKeys.Flush();
+                    Thread.Sleep(delay);
+                }
+
+                // if configured, send an 'end' key to signal that we're at the end of the barcode
+                if (endKey != Keys.None)
+                    SendKeys.SendWait("{" + Enum.GetName(typeof(Keys), endKey) + "}");
+
+                // beep!
+                System.Media.SystemSounds.Beep.Play();
             }
-
-            // if configured, send an 'end' key to signal that we're at the end of the barcode
-            if (endKey != Keys.None)
-                SendKeys.SendWait("{" + Enum.GetName(typeof (Keys), endKey) + "}");
-
-            // beep!
-            System.Media.SystemSounds.Beep.Play();
+            catch(Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -130,7 +145,6 @@ namespace BarcodeSimulator
 
             var code = newStringTextBox.Text;
 
-            
             itemsListView.Items.Add(new ListViewItem(new[] { code, Barcode.GetTypeName(code) }));
             itemsListView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             

@@ -38,6 +38,7 @@
             this.itemsGroupBox = new System.Windows.Forms.GroupBox();
             this.newCodeTypeLabel = new System.Windows.Forms.Label();
             this.configurationGroupBox = new System.Windows.Forms.GroupBox();
+            this.crlfCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.delayNumeric)).BeginInit();
             this.itemsGroupBox.SuspendLayout();
             this.configurationGroupBox.SuspendLayout();
@@ -56,16 +57,11 @@
             0,
             0,
             0});
-            this.delayNumeric.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
             this.delayNumeric.Name = "delayNumeric";
             this.delayNumeric.Size = new System.Drawing.Size(120, 20);
             this.delayNumeric.TabIndex = 1;
             this.delayNumeric.Value = new decimal(new int[] {
-            50,
+            10,
             0,
             0,
             0});
@@ -146,6 +142,7 @@
             this.columnHeader1,
             this.columnHeader2});
             this.itemsListView.FullRowSelect = true;
+            this.itemsListView.HideSelection = false;
             this.itemsListView.HoverSelection = true;
             this.itemsListView.Location = new System.Drawing.Point(9, 69);
             this.itemsListView.MultiSelect = false;
@@ -168,14 +165,13 @@
             // 
             // itemsGroupBox
             // 
-            this.itemsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.itemsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.itemsGroupBox.Controls.Add(this.newCodeTypeLabel);
             this.itemsGroupBox.Controls.Add(this.itemsListView);
             this.itemsGroupBox.Controls.Add(this.label3);
             this.itemsGroupBox.Controls.Add(this.newStringTextBox);
-            this.itemsGroupBox.Location = new System.Drawing.Point(12, 136);
+            this.itemsGroupBox.Location = new System.Drawing.Point(12, 147);
             this.itemsGroupBox.Name = "itemsGroupBox";
             this.itemsGroupBox.Size = new System.Drawing.Size(254, 264);
             this.itemsGroupBox.TabIndex = 14;
@@ -194,6 +190,7 @@
             // 
             this.configurationGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.configurationGroupBox.Controls.Add(this.crlfCheckBox);
             this.configurationGroupBox.Controls.Add(this.label2);
             this.configurationGroupBox.Controls.Add(this.delayNumeric);
             this.configurationGroupBox.Controls.Add(this.endsWithComboBox);
@@ -202,16 +199,26 @@
             this.configurationGroupBox.Controls.Add(this.hotkeyTextBox);
             this.configurationGroupBox.Location = new System.Drawing.Point(12, 12);
             this.configurationGroupBox.Name = "configurationGroupBox";
-            this.configurationGroupBox.Size = new System.Drawing.Size(254, 118);
+            this.configurationGroupBox.Size = new System.Drawing.Size(254, 130);
             this.configurationGroupBox.TabIndex = 15;
             this.configurationGroupBox.TabStop = false;
             this.configurationGroupBox.Text = "Configuration";
+            // 
+            // crlfCheckBox
+            // 
+            this.crlfCheckBox.AutoSize = true;
+            this.crlfCheckBox.Location = new System.Drawing.Point(78, 107);
+            this.crlfCheckBox.Name = "crlfCheckBox";
+            this.crlfCheckBox.Size = new System.Drawing.Size(81, 17);
+            this.crlfCheckBox.TabIndex = 13;
+            this.crlfCheckBox.Text = "Add CR+LF";
+            this.crlfCheckBox.UseVisualStyleBackColor = true;
             // 
             // BarcodeSimulatorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 408);
+            this.ClientSize = new System.Drawing.Size(280, 419);
             this.Controls.Add(this.configurationGroupBox);
             this.Controls.Add(this.itemsGroupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -243,6 +250,7 @@
         private System.Windows.Forms.GroupBox itemsGroupBox;
         private System.Windows.Forms.GroupBox configurationGroupBox;
         private System.Windows.Forms.Label newCodeTypeLabel;
+        private System.Windows.Forms.CheckBox crlfCheckBox;
     }
 }
 
