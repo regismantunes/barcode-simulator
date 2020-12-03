@@ -80,7 +80,6 @@
             this.newStringTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.newStringTextBox.Location = new System.Drawing.Point(9, 43);
-            this.newStringTextBox.MaxLength = 50;
             this.newStringTextBox.Name = "newStringTextBox";
             this.newStringTextBox.Size = new System.Drawing.Size(162, 20);
             this.newStringTextBox.TabIndex = 3;
